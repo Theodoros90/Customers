@@ -1,3 +1,5 @@
+using Application.Core;
+using Application.Customers.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -13,8 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 builder.Services.AddCors();
+builder.Services.AddMediatR(x =>
+x.RegisterServicesFromAssemblyContaining<GetCustomerList.Hndler>());
 
-
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfiles).Assembly);
 var app = builder.Build();
 //Configure the HTTP request pipeline
 

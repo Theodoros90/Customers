@@ -11,17 +11,13 @@ type Props = {
     openForm: (id: string) => void;
     closeForm: () => void;
     editMode: boolean;
-    submitForm: (customer: Customer) => void;
-    deleteCustomer: (id: string) => void;
 }
 export default function CustomerDashboard({ customers, selectCustomer,
     cancelSelectCustomer,
     selectedCustomer,
     openForm,
     closeForm,
-    editMode,
-    submitForm,
-    deleteCustomer
+    editMode
 }: Props) {
     return (
         <Grid2 container spacing={3}>
@@ -29,13 +25,12 @@ export default function CustomerDashboard({ customers, selectCustomer,
                 <CustomerList
                     customers={customers}
                     selectCustomer={selectCustomer}
-                    deleteCustomer={deleteCustomer}
                 />
             </Grid2>
             <Grid2 size={5}>
                 {selectedCustomer && !editMode &&
                     <CustomerDetails
-                        customer={selectedCustomer}
+                        selectedCustomer={selectedCustomer}
                         cancelSelectCustomer={cancelSelectCustomer}
                         openForm={openForm}
                     />}
@@ -43,7 +38,6 @@ export default function CustomerDashboard({ customers, selectCustomer,
                     <CustomerForm
                         closeForm={closeForm}
                         customer={selectedCustomer}
-                        submitForm={submitForm}
                     />}
             </Grid2>
         </Grid2>

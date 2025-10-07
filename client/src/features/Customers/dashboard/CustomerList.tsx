@@ -3,13 +3,11 @@ import CustomerCard from "./CustomerCard";
 type Props = {
     customers: Customer[]
     selectCustomer: (id: string) => void;
-    deleteCustomer: (id: string) => void;
 }
 
 export default function CustomerList({
     customers,
-    selectCustomer,
-    deleteCustomer
+    selectCustomer
 }: Props) {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -18,7 +16,6 @@ export default function CustomerList({
                     key={customer.id}
                     customer={customer}
                     selectCustomer={selectCustomer}
-                    deleteCustomer={deleteCustomer}
                 />
             ))}
         </Box>

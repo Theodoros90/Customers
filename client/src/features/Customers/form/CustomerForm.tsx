@@ -1,15 +1,16 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import type { FormEvent } from "react";
+import { useCustomers } from "../../../lib/hooks/useCustomers";
 
 type Props = {
     customer?: Customer
     closeForm: () => void
-    submitForm: (customer: Customer) => void
 }
 
-export default function CustomerForm({ customer, closeForm, submitForm }: Props) {
+export default function CustomerForm({ customer, closeForm }: Props) {
+    const { updateCustomer, createCustomer } = useCustomers();
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const data: { [key: string]: FormDataEntryValue } = {}
@@ -19,9 +20,14 @@ export default function CustomerForm({ customer, closeForm, submitForm }: Props)
 
             data[key] = value;
         });
-        if (customer) data.id = customer.id;
-
-        submitForm(data as unknown as Customer);
+        if (customer) {
+            data.id = customer.id;
+            await updateCustomer.mutateAsync(data as unknown as Customer);
+            closeForm();
+        } else {
+            await createCustomer.mutateAsync(data as unknown as Customer);
+            closeForm();
+        }
 
 
     }
@@ -38,7 +44,11 @@ export default function CustomerForm({ customer, closeForm, submitForm }: Props)
                 <TextField name="description" label='Description' defaultValue={customer?.description} multiline rows={3} />
                 <Box display='flex' gap={3}>
                     <Button onClick={closeForm} color="inherit">Cancel</Button>
-                    <Button type="submit" color="success" variant="contained">Submit</Button>
+                    <Button type="submit"
+                        color="success"
+                        variant="contained"
+                        disabled={updateCustomer.isPending || createCustomer.isPending}
+                    >Submit</Button>
                 </Box>
             </Box>
 

@@ -1,12 +1,16 @@
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material"
+import { useCustomers } from "../../../lib/hooks/useCustomers";
 
 type Props = {
-    customer: Customer
+    selectedCustomer: Customer
     cancelSelectCustomer: () => void
     openForm: (id: string) => void;
 }
 
-export default function CustomerDetails({ customer, cancelSelectCustomer, openForm }: Props) {
+export default function CustomerDetails({ selectedCustomer, cancelSelectCustomer, openForm }: Props) {
+    const { customers } = useCustomers();
+    const customer = customers?.find(x => x.id === selectedCustomer.id);
+    if (!customer) return <Typography color="error">Customer not found</Typography>
     return (
         <Card sx={{ borderRadius: 3 }}>
 

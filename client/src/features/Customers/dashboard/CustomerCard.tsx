@@ -1,15 +1,15 @@
 import { Box, Button, Card, CardActions, CardContent, Typography } from "@mui/material"
+import { useCustomers } from "../../../lib/hooks/useCustomers";
 
 
 
 type Props = {
     customer: Customer
     selectCustomer: (id: string) => void;
-    deleteCustomer: (id: string) => void;
 }
 
-export default function CustomerCard({ customer, selectCustomer, deleteCustomer }: Props) {
-
+export default function CustomerCard({ customer, selectCustomer }: Props) {
+    const { deleteCustomer } = useCustomers();
 
     return (
         <Card sx={{ borderRadius: 3 }}>
@@ -24,8 +24,12 @@ export default function CustomerCard({ customer, selectCustomer, deleteCustomer 
                     <Button onClick={() => selectCustomer(customer.id)} size="medium"
                         variant="contained">View</Button>
 
-                    <Button onClick={() => deleteCustomer(customer.id)} color="error" size="medium"
-                        variant="contained">Delete</Button>
+                    <Button
+                        onClick={() => deleteCustomer.mutate(customer.id)}
+                        disabled={deleteCustomer.isPending}
+                        color="error" size="medium"
+                        variant="contained"
+                    >Delete</Button>
                 </Box>
 
             </CardActions>
